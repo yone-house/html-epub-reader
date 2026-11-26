@@ -1,8 +1,8 @@
 # HTML EPUB Reader
 
-Read EPUBs in your web browser! Works offline with nothing to install, primarily built on [epub.js](https://github.com/futurepress/epub.js).
+Read EPUBs in your web browser with reflowable and accessible controls, primarily built on [epub.js](https://github.com/futurepress/epub.js).
 
-Use it online at [reader.yone.house](https://reader.yone.house), or download the ZIP for offline use and sharing. Both work the same way.
+Use it online at [reader.yone.house](https://reader.yone.house), or download the ZIP for offline use and sharing. Both work the same way. Local copies are fully-functional without internet connection.
 
 The reader is an HTML document that opens in your browser. The JavaScript that drives it is in the reader-dependencies folder, and feel free to open any of it in a text editor to see what it does. It saves nothing to your computer, and doesn't connect to the internet on its own when using a local copy (links inside a book can still open websites).
 
