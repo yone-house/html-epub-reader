@@ -57,7 +57,7 @@ Online, the reader is hosted on Cloudflare Pages. Cloudflare handles each visit 
 
 The offline copy does not connect to the internet on its own (links inside a book can still open websites).
 
-WARNING: Most EPUB readers block in-book scripts for security. This one asks first, and you can change it later under Options > Display > Book Scripts. Don't allow scripts for books you don't trust.
+WARNING: Most EPUB readers block in-book scripts for security. This one allows scripts after asking first, and you can change that setting later under Options > Display > Book Scripts. Don't allow scripts for books you don't trust.
 
 
 ## Files
