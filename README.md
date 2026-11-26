@@ -60,6 +60,7 @@ WARNING: Most EPUB readers block in-book scripts for security. This one asks fir
 ## Files
 
 epub-reader.html      the reader
+
 reader-dependencies/  reader.js, fonts.js, epub.js, JSZip, Fluoro, their open-source licenses, and the favicon
 
 
@@ -68,8 +69,11 @@ reader-dependencies/  reader.js, fonts.js, epub.js, JSZip, Fluoro, their open-so
 html file and reader.js by Yone K, 2026
 
 epub.js by FuturePress: https://github.com/futurepress/epub.js
+
 JSZip: https://github.com/Stuk/jszip
+
 OpenDyslexic: https://opendyslexic.org
+
 Risograph theme made with Fluoro: https://github.com/yafira/fluoro
 
 Open-source licenses are in the reader-dependencies folder.
