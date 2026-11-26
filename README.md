@@ -61,7 +61,7 @@ reader-dependencies/  reader.js, fonts.js, epub.js, JSZip, Fluoro, their open-so
 
 ## Credits
 
-reader.js and html file by Yone K, 2026
+html file and reader.js by Yone K, 2026
 
 epub.js by FuturePress: https://github.com/futurepress/epub.js
 JSZip: https://github.com/Stuk/jszip
