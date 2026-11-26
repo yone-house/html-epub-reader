@@ -1,5 +1,5 @@
 # HTML EPUB Reader
-----------------
+
 Read EPUBs in your web browser! Works offline with nothing to install.
 
 The reader is a web page (epub-reader.html) that opens in your browser. The JavaScript that drives it is in the reader-dependencies folder, and feel free to open any of it in a text editor to see what it does. It saves nothing to your computer and doesn't connect to the internet on its own (links inside a book can still open websites).
