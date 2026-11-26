@@ -9,9 +9,9 @@ The reader is an HTML document that opens in your browser. The JavaScript that d
 
 ## How to use
 
- Online: go to [reader.yone.house](https://reader.yone.house).
+ Online: visit [reader.yone.house](https://reader.yone.house).
  
- Offline: double-click epub-reader.html to open it in your browser.
+ Offline: [download ZIP folder](html-epub-reader.zip), extract files, and double-click epub-reader.html to open in your default browser.
 
 1. Click "Open book" and choose an .epub file.
 2. If the book contains scripts, you'll be asked whether to allow them. Only say yes for books you trust.
@@ -91,7 +91,7 @@ Risograph theme made with Fluoro: https://github.com/yafira/fluoro
 
 Open-source licenses are in the reader-dependencies folder.
 
-This project is open-source under MIT License.
+This project is open-source under [MIT License](LICENSE).
 
 
 ## Feedback
