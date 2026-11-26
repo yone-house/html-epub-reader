@@ -52,7 +52,7 @@ Books opened with "Open book" stay on your computer--they're read by your browse
 
 No reading history, settings, or local storage is saved. Your browser history (unless you use private browsing) and your computer's recent-files lists may still show that the reader or a book file was opened.
 
-Online, the reader is hosted on Cloudflare Pages. Like any website host, Cloudflare handles each visit and may record basic technical details such as your IP address, under its own privacy policy. The offline copy doesn't connect to the internet on its own (links inside a book can still open websites).
+Online, the reader is hosted on Cloudflare Pages. Cloudflare handles each visit and may record basic details like IP Address, but does not use cookies or localStorage, according to [its own privacy policy](https://www.cloudflare.com/privacypolicy/). The offline copy doesn't connect to the internet on its own (links inside a book can still open websites).
 
 WARNING: Most EPUB readers block in-book scripts for security. This one asks first, and you can change it later under Options > Display > Book Scripts. Don't allow scripts for books you don't trust.
 
