@@ -50,7 +50,7 @@ The toolbar shows the printed page number, or your progress through the book if 
 
 **Reflowable controls:** all sizing, spacing, fonts, and themes can be customized (including built-in OpenDyslexic font).
 
-**Alt text descriptions:** image alt text is read by built-in read aloud function, and can also be made visible in the text under Options > Display > Image Descriptions.
+**Alt text descriptions:** image alt text is announced and read by built-in read aloud function, and can also be made visible in the text under Options > Display > Image Descriptions.
 
 **Metadata:** Book accessibility metadata can be read in plain text under "Metadata" tab (alongside other general metadata fields).
 
