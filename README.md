@@ -17,13 +17,18 @@ The reader is a web page (epub-reader.html) that opens in your browser. The Java
 
 Turn pages with the arrow keys, the arrows beside the page, or by swiping on a touch screen.
 
-Contents     chapter list, search the whole book, jump back to where you were
-Read aloud   reads from the top of the screen with the computer's voice, turning pages as it goes
-Full screen  hides the browser's tabs (press Escape or "Exit full screen" to leave)
-Metadata     the book's details, including any accessibility information
-Options      Display: reading mode, theme (including Risograph & ink color), animations, image descriptions, book scripts
-             Text: font, size, weight, alignment
-             Spacing: line length, line/paragraph/letter/word spacing, indentation
+| **Toolbar**     	|                                                                                                                  	|
+|-----------------	|------------------------------------------------------------------------------------------------------------------	|
+| **Open book**   	| opens new book from local files                                                                                  	|
+| **Contents**    	| chapter list, search the whole book, jump back to where you were                                                 	|
+| **Search**      	| searches whole book for terms, allows a return to previous location                                              	|
+| **Read aloud**  	| reads from the top of the screen with the computer's voice, turning pages as it goes                             	|
+| **Full screen** 	| hides the browser's tabs (press Escape or "Exit full screen" to leave)                                           	|
+| **Metadata**    	| the book's details, including any accessibility information                                                      	|
+| **Options**     	| **Display:** reading mode, theme (including Risograph & ink color), animations, image descriptions, book scripts 	|
+|                 	| **Text:** font, size, weight, alignment                                                                          	|
+|                 	| **Spacing:** line length, line/paragraph/letter/word spacing, indentation                                        	|
+
 
 Most fonts come from your computer; if one isn't installed, the browser uses a similar one. OpenDyslexic is built in with fonts.js
 
