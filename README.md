@@ -42,14 +42,19 @@ The toolbar shows the printed page number, or your progress through the book if 
 
 ## Accessibility
 
-Fully keyboard navigable: Tab moves through the toolbar, the arrow keys turn pages, and Escape closes menus and full screen. 
+Keyboard navigable: Tab moves through the toolbar, arrow keys turn pages, Escape closes menus and full screen. Skip nav link included.
+
 Screen reader compatible: screen readers hear page and chapter changes, and footnotes open in pop-up dialogs. 
+
 Access settings compliant: reader starts in dark, high-contrast, or reduced-motion setup if the computer asks for one.
+
 Reflowable controls: all sizing, spacing, fonts, and themes can be customized (including built-in OpenDyslexic font).
 
-Book accessibility metadata is made available in plain text under "Metadata" tab.
+Alt text descriptions: alt text is read by built-in read aloud function, and can be made visible in text under Options > Display > Image Descriptions.
 
-**Known issues:** reader settings and history reset each visit; read aloud uses the book's main language throughout and does not adapt to inline language tags; page numbers are not navigable themselves (but table of contents and search are).
+*Book accessibility metadata is made available in plain text under "Metadata" tab.*
+
+**Known issues:** reader settings and history reset each visit; read aloud uses the book's main language throughout and does not adapt to inline language tags; page numbers are not navigable themselves (but table of contents and search are). 
 
 
 ## Security
