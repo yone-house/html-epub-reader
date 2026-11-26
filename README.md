@@ -2,15 +2,19 @@
 
 Read EPUBs in your web browser! Works offline with nothing to install.
 
-The reader is a web page (epub-reader.html) that opens in your browser. The JavaScript that drives it is in the reader-dependencies folder, and feel free to open any of it in a text editor to see what it does. It saves nothing to your computer and doesn't connect to the internet on its own (links inside a book can still open websites).
+Use it online at [reader.yone.house](https://reader.yone.house), or download the ZIP for offline use & sharing. Both work the same way.
+
+The reader is an HTML document that opens in your browser. The JavaScript that drives it is in the reader-dependencies folder, and feel free to open any of it in a text editor to see what it does. It saves nothing to your computer, and doesn't connect to the internet on its own when using a local copy (links inside a book can still open websites).
 
 
 ## How to use
 
-1. Double-click epub-reader.html to open it in your browser.
-2. Click "Open book" and choose an .epub file.
-3. If the book contains scripts, you'll be asked whether to allow them. Only say yes for books you trust.
-4. Read! Click "Open book" again to open a different book. Nothing is remembered between visits.
+ Online: go to [reader.yone.house](https://reader.yone.house).
+ Offline: double-click epub-reader.html to open it in your browser.
+
+1. Click "Open book" and choose an .epub file.
+2. If the book contains scripts, you'll be asked whether to allow them. Only say yes for books you trust.
+3. Read! Click "Open book" again to open a different book. Nothing is remembered between visits.
 
 
 ## Navigation / Toolbar
