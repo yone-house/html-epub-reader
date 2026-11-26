@@ -1,6 +1,6 @@
 # HTML EPUB Reader
 
-Read EPUBs in your web browser! Works offline with nothing to install.
+Read EPUBs in your web browser! Works offline with nothing to install, primarily built on [epub.js](https://github.com/futurepress/epub.js).
 
 Use it online at [reader.yone.house](https://reader.yone.house), or download the ZIP for offline use and sharing. Both work the same way.
 
@@ -42,9 +42,14 @@ The toolbar shows the printed page number, or your progress through the book if 
 
 ## Accessibility
 
-Everything works from the keyboard: Tab moves through the toolbar, the arrow keys turn pages, and Escape closes menus and drawers. Screen readers hear page and chapter changes, and footnotes open in a pop-up instead of jumping away. The reader starts in a dark, high-contrast or reduced-motion setup if your computer asks for one.
+Fully keyboard navigable: Tab moves through the toolbar, the arrow keys turn pages, and Escape closes menus and full screen. 
+Screen reader compatible: screen readers hear page and chapter changes, and footnotes open in pop-up dialogs. 
+Access settings compliant: reader starts in dark, high-contrast, or reduced-motion setup if the computer asks for one.
+Reflowable controls: all sizing, spacing, fonts, and themes can be customized (including built-in OpenDyslexic font).
 
-Known issues: settings reset each visit, and read aloud uses the book's main language throughout.
+Book accessibility metadata is made available in plain text under "Metadata" tab.
+
+**Known issues:** reader settings and history reset each visit; read aloud uses the book's main language throughout and does not adapt to inline language tags; page numbers are not navigable themselves (but table of contents and search are).
 
 
 ## Security
@@ -60,11 +65,11 @@ The offline copy does not connect to the internet on its own (links inside a boo
 WARNING: Most EPUB readers block in-book scripts for security. This one allows scripts after asking first, and you can change that setting later under Options > Display > Book Scripts. Don't allow scripts for books you don't trust.
 
 
-## Files
+## Files in ZIP
 
-epub-reader.html      the reader
+epub-reader.html:     the reader
 
-reader-dependencies/  reader.js, fonts.js, epub.js, JSZip, Fluoro, their open-source licenses, and the favicon
+reader-dependencies/:  reader.js, fonts.js, epub.js, JSZip, Fluoro, their open-source licenses, and the favicon
 
 
 ## Credits
