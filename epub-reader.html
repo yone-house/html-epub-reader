@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="reader-dependencies/favicon.png">
+  <title>EPUB Reader</title>
+  <style>
+    /* Theme Color Variables */
+    :root {
+      --bg: white;
+      --toolbar-bg: white;
+      --border: darkgray;
+      --text: black;
+      --btn-bg: white;
+      --focus-ring: mediumblue;    }
+
+    body[data-theme="default-dark"] {
+      --bg: white;
+      --toolbar-bg: black;
+      --border: darkgray;
+      --text: whitesmoke;
+      --btn-bg: black;
+      --focus-ring: skyblue;
+      --page-text: black;
+    }
+
+    body[data-theme="dark"] {
+      --bg: black;
+      --toolbar-bg: black;
+      --border: darkgray;
+      --text: whitesmoke;
+      --btn-bg: black;
+      --focus-ring: skyblue;
+    }
+
+    body[data-theme="sepia"] {
+      --bg: #fef4e2;
+      --toolbar-bg: #eadecd;
+      --border: #8b7355;
+      --text: #5f4b32;
+      --btn-bg: #fef4e2;
+      --focus-ring: #8b5a2b;
+    }
+
+    body[data-theme="highcontrast"] {
+      --bg: black;
+      --toolbar-bg: black;
+      --border: white;
+      --text: yellow;
+      --btn-bg: black;
+      --focus-ring: yellow;
+    }
+
+    html, body {
+      font-family: system-ui, -apple-system, sans-serif;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      height: 100dvh;
+      background-color: var(--bg);
+      color: var(--text);
+      overflow: hidden !important;
+      box-sizing: border-box;
+    }
+
+    /*FOR RISO THEME*/
+    body[data-theme="riso"] {
+      --bg: snow;
+      --toolbar-bg: black;
+      --border: snow;
+      --text: snow;
+      --btn-bg: black;
+      --focus-ring: snow;
+    }
+
+    body[data-theme="riso"] #toolbar {
+      position: relative;
+      box-shadow: -3px 3px 0 white;
+    }
+
+    #riso-options[hidden] {
+      display: none;
+    }
+
+    @media (forced-colors: active) {
+      .fluoro-lite-layer {
+        display: none;
+      }
+    }
+    
+    /* sr-only */
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+    }
+
+    /* skip nav link */
+    .skip-nav {
+      position: absolute;
+      top: -50px;
+      left: 10px;
+      background: var(--toolbar-bg);
+      color: var(--text);
+      padding: 8px 16px;
+      z-index: 100;
+      border: 2px solid var(--focus-ring);
+      border-radius: 4px;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    
+    .skip-nav:focus {
+      top: 10px;
+    }
+
+    #toolbar {
+      background: var(--toolbar-bg);
+      color: var(--text);
+      padding: 10px 20px;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+      z-index: 10;
+      flex-wrap: wrap;
+    }
+
+    #options-bar {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    
+    #options-bar.collapsed {
+      display: none;
+    }
+
+    #options-bar {
+      flex-basis: 100%;
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .options-tabs {
+      display: flex;
+      gap: 4px;
+      border-bottom: 1px solid var(--border);
+      flex-basis: 100%;
+    }
+    
+    .options-tabs [role="tab"] {
+      border: none;
+      border-bottom: 3px solid transparent;
+      border-radius: 4px 4px 0 0;
+      background: transparent;
+      margin-bottom: -1px;
+      padding: 6px 14px;
+    }
+    
+    .options-tabs [role="tab"]:hover {
+      background: var(--btn-hover);
+    }
+    
+    .options-tabs [role="tab"][aria-selected="true"] {
+      border-bottom-color: var(--focus-ring);
+      font-weight: 600;
+    }
+    
+    .options-panel {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+      flex: 1 1 auto;
+    }
+    
+    .options-panel[hidden] {
+      display: none;
+    }
+
+    #viewer-container {
+      display: flex;
+      flex: 1;
+      position: relative;
+      width: 100vw;
+      min-height: 0;
+      box-sizing: border-box;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden !important;
+      background: var(--bg);
+    }
+
+    body[data-mode="scrolled"] #viewer-container {
+      overflow-y: auto !important;
+      overflow-x: hidden !important;
+      align-items: flex-start;
+    }
+
+    body[data-mode="scrolled"] .epub-container {
+      padding-bottom: 30px;
+      box-sizing: border-box;
+    }
+
+    .page-arrow {
+      flex: 0 0 clamp(40px, 6vw, 64px);
+      align-self: stretch;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      border: none;
+      border-radius: 0;
+      background: transparent;
+      color: var(--page-text, var(--text));
+      opacity: 0.55;
+    }
+    
+    .page-arrow:hover,
+    .page-arrow:focus-visible {
+      background: transparent;
+      opacity: 1;
+    }
+    
+    .page-arrow:focus-visible {
+      outline-offset: -4px;
+    }
+    
+    .page-arrow svg {
+      width: 28px;
+      height: 28px;
+    }
+
+    #toc-drawer {
+      width: min(340px, 100%);
+      background: var(--toolbar-bg);
+      color: var(--text);
+      border-right: 1px solid var(--border);
+      overflow-y: auto;
+      display: none;
+      flex-shrink: 0;
+      padding: 15px;
+      z-index: 5;
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      box-sizing: border-box;
+    }
+    
+    #toc-drawer.open { 
+      display: block; 
+    }
+    
+    #toc-list, #search-results { 
+      list-style: none; 
+      padding: 0; 
+      margin: 0; 
+    }
+
+    #toc-list li { 
+      margin-bottom: 2px; 
+    }
+    
+    #toc-list ul {
+      list-style: none;
+      padding-left: 12px;
+      margin: 2px 0 6px 8px;
+      border-left: 1px solid var(--border);
+    }
+
+    #toc-list a, #search-results a {
+      color: var(--text);
+      text-decoration: none;
+      font-size: 1rem;
+      line-height: 1.4;
+      display: block;
+      padding: 6px 8px;
+      border-radius: 4px;
+    }
+
+    #toc-list a:hover, #search-results a:hover {
+      text-decoration: underline;
+    }
+
+    #search-form label, #search-input {
+      font-size: 1rem;
+    }
+
+    #search-form label {
+      font-weight: bold;
+    }
+
+    #search-input {
+      padding: 6px;
+      margin: 4px 0 8px;
+    }
+
+    #search-results li {
+      border-bottom: 1px solid var(--border);
+    }
+
+    .result-chapter {
+      display: block;
+      font-weight: 600;
+    }
+
+    #search-results mark {
+      background: var(--focus-ring);
+      color: var(--toolbar-bg);
+      padding: 0 2px;
+    }
+
+    #search-status { 
+      font-size: 0.9rem; 
+      margin: 0 0 6px; 
+    }
+
+    #search-back { 
+      margin-bottom: 8px; 
+    }
+
+    #search-results a[aria-current="true"] {
+      border-left: 3px solid var(--focus-ring);
+      font-weight: 600;
+    }
+
+    #metadata-drawer {
+      width: min(420px, 100%);
+      background: var(--toolbar-bg);
+      color: var(--text);
+      border-left: 1px solid var(--border);
+      overflow-y: auto;
+      display: none;
+      padding: 15px;
+      z-index: 5;
+      position: absolute;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      box-sizing: border-box;
+    }
+
+    #metadata-drawer.open { display: block; }
+    #metadata-drawer h4 {
+      font-size: 0.95rem;
+      margin: 12px 0 4px;
+    }
+
+    #metadata-drawer dl {
+      display: grid;
+      grid-template-columns: fit-content(35%) 1fr;
+      gap: 0;
+      margin: 0;
+      font-size: 0.85rem;
+    }
+
+    #metadata-drawer dt,
+    #metadata-drawer dd {
+      padding: 6px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    #metadata-drawer dt {
+      font-weight: 600;
+      padding-right: 12px;
+      overflow-wrap: break-word;
+    }
+
+    #metadata-drawer dd {
+      margin: 0;
+      overflow-wrap: anywhere;
+    }
+
+    #metadata-drawer dt:last-of-type,
+    #metadata-drawer dd:last-of-type {
+      border-bottom: none;
+    }
+
+    #title-area {
+      flex: 1 1 0;
+      min-width: 0;
+    }
+
+    #book-title {
+      margin: 0;
+      padding: 0 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    #viewer {
+      flex: 1 1 auto;
+      min-width: 0;
+      max-width: 1000px;
+      height: 100%;
+      position: relative;
+      background: var(--bg);
+      outline: none;
+      cursor: pointer;
+      overflow: hidden !important;
+      box-sizing: border-box !important;
+    }
+
+    body[data-mode="scrolled"] #viewer .epub-container {
+      scrollbar-gutter: stable;
+      scrollbar-color: transparent transparent;
+    }
+    body[data-mode="scrolled"] #viewer .epub-container.scrolling {
+      scrollbar-color: rgba(210, 210, 210, 60%)  transparent;
+    }
+
+    body[data-mode="scrolled"] #viewer {
+      height: fit-content;
+      min-height: 100%;
+      overflow-y: visible !important;
+      overflow-x: hidden !important;
+    }
+
+    button, select {
+      padding: 6px 12px;
+      border: 1px solid var(--border);
+      /*border-radius: 4px;*/
+      background: var(--btn-bg);
+      color: var(--text);
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+
+    button:hover, select:hover { filter: brightness(0.9); }
+    
+    button:focus-visible, select:focus-visible, a:focus-visible, #viewer:focus-visible {
+      outline: 2px solid var(--focus-ring);
+      outline-offset: 2px;
+    }
+
+    label { font-size: 0.85rem; display: flex; align-items: center; gap: 5px; color: var(--text); }
+
+    #page-info {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--text);
+      padding: 0 8px;
+    }
+
+    /* Script allow styles*/
+
+    #scripts-dialog {
+      background: var(--toolbar-bg);
+      color: var(--text);
+      border: none;
+      border-radius: 8px;
+      padding: 20px;
+      max-width: min(420px, 90vw);
+    }
+
+    #scripts-dialog::backdrop {
+      backdrop-filter: blur(3px);
+    }
+
+    #scripts-dialog h2 {
+      margin-top: 0;
+      font-size: 1.1rem;
+    }
+
+    #scripts-dialog form {
+      display: flex;
+      gap: 8px;
+      justify-content: flex-end;
+    }
+
+    /*pop-up footnote styles*/
+    #note-dialog {
+      background: var(--toolbar-bg);
+      color: var(--text);
+      border: none;
+      border-radius: 8px;
+      padding: 20px;
+      max-width: min(520px, 90vw);
+    }
+
+    #note-dialog::backdrop {
+      backdrop-filter: brightness(0.7);
+    }
+
+    #note-dialog h2 {
+      margin-top: 0;
+      font-size: 1.1rem;
+    }
+
+    #note-dialog-text {
+      line-height: 1.5;
+      max-height: 60vh;
+      overflow-y: auto;
+    }
+
+    #note-dialog form {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 12px;
+    }
+
+    /*Close options bar*/
+
+    #options-close {
+      align-self: flex-end;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px 8px;
+      border: none;
+    }
+
+    #options-close svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        transition-property: none !important;
+        transform: none !important;
+        animation: none !important;
+      }
+    }
+
+    body.reduce-motion * {
+      transition-property: none !important;
+      transform: none !important;
+      animation: none !important;
+    }
+
+    @media (hover: hover) {
+      body.is-fullscreen #toolbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        translate: 0 calc(-100% + 8px);
+        transition: translate 0.2s;
+      }
+      body.is-fullscreen #toolbar:hover,
+      body.is-fullscreen #toolbar:focus-within {
+        translate: 0 0;
+      }
+    }
+  </style>
+
+  <!-- Required dependencies for epub.js, in folder -->
+  <script src="reader-dependencies/jszip.min.js"></script>
+  <script src="reader-dependencies/epub.min.js"></script>
+</head>
+<body data-theme="light" data-mode="scrolled">
+
+  <div id="sr-status" class="sr-only" role="status" aria-live="polite"></div>
+  <a href="#" id="skip-nav" class="skip-nav">Skip to book text</a>
+
+  <div id="toolbar">
+    <button id="open-book"><span aria-hidden="true">📖</span> Open book</button>
+    <input type="file" id="book-file" accept=".epub,application/epub+zip" hidden>
+    <button id="toc-toggle" aria-expanded="false" aria-controls="toc-drawer"><span aria-hidden="true">☰</span> Contents</button>
+    <button id="search-toggle" aria-expanded="false" aria-controls="toc-drawer"><span aria-hidden="true">🔍</span> Search</button>
+
+    <div id="title-area">
+      <h1 id="book-title" hidden></h1>
+    </div>
+
+    <span id="page-info">Loading book...</span>
+
+    <button id="read-aloud"><span aria-hidden="true">🗣️</span> Read aloud</button>
+    <button id="fullscreen-toggle"><span aria-hidden="true">⛶</span> Full screen</button>
+    <button id="metadata-toggle" aria-expanded="false" aria-controls="metadata-drawer"><span aria-hidden="true">ℹ️</span> Metadata</button>
+    <button id="options-toggle" aria-expanded="false" aria-controls="options-bar"><span aria-hidden="true">⚙️</span> Options</button>
+
+    <div id="options-bar" class="collapsed">
+      <div class="options-tabs" role="tablist" aria-label="Options">
+        <button id="tab-display" role="tab" aria-selected="true" aria-controls="panel-display">Display</button>
+        <button id="tab-text" role="tab" aria-selected="false" aria-controls="panel-text" tabindex="-1">Text</button>
+        <button id="tab-spacing" role="tab" aria-selected="false" aria-controls="panel-spacing" tabindex="-1">Spacing</button>
+      </div>
+
+      <div id="panel-display" class="options-panel" role="tabpanel" aria-labelledby="tab-display">
+        <label>Reading Mode: 
+          <select id="mode-control">
+            <option value="scrolled" selected>Continuous Scroll</option>
+            <option value="paginated-spread">Paginated (Two Column Spread)</option>
+            <option value="paginated-single">Paginated (Single Column)</option>
+          </select>
+        </label>
+
+        <label>Theme: 
+          <select id="theme-select">
+            <option value="default" selected>Book default (light)</option>
+            <option value="default-dark">Book default (dark)</option>
+            <option value="light">Light</option>
+            <option value="dark">Dark</option>
+            <option value="sepia">Sepia</option>
+            <option value="highcontrast">High Contrast</option>
+            <option value="riso">Risograph</option>
+          </select>
+        </label>
+
+        <label id="riso-options" hidden>Riso Ink Colors: 
+          <select id="ink-control">
+            <option value="#ff48b0,#0078bf">Pink + Blue</option>
+            <option value="#ff6c2f,#00838a">Orange + Teal</option>
+            <option value="#00a95c,#765ba7">Green + Purple</option>
+            <option value="#ffb511,#516e5a">Sunflower + Forest</option>
+            <option value="#ff665e,#000000">Red + Black</option>
+            <option value="#0078bf,#000000">Blue + Black</option>
+          </select>
+        </label>
+
+        <label>Animations: 
+          <select id="animation-control">
+            <option value="on" selected>On</option>
+            <option value="off">Off</option>
+          </select>
+        </label>
+
+        <label>Image Descriptions: 
+          <select id="alt-control">
+            <option value="off" selected>Hide</option>
+            <option value="on">Show</option>
+          </select>
+        </label>
+
+        <label>Book Scripts: 
+          <select id="scripts-control">
+            <option value="on">On</option>
+            <option value="off" selected>Off</option>
+          </select>
+        </label>
+      </div>
+
+      <div id="panel-text" class="options-panel" role="tabpanel" aria-labelledby="tab-text" hidden>
+        <label>Font Family: 
+          <select id="font-family" aria-label="Font Family">
+            <option value="default" selected>Book default</option>
+            <option value="default-sans" style="font-family: sans-serif">System sans</option>
+            <option value="default-serif" style="font-family: serif">System serif</option>
+            <option value="default-monospace" style="font-family: monospace">System monospace</option>
+            <option value="arial" style="font-family: Arial, sans-serif">Arial</option>
+            <option value="verdana" style="font-family: Verdana, Geneva, Tahoma, sans-serif">Verdana</option>
+            <option value="times-new-roman" style="font-family: 'Times New Roman', Times, serif">Times New Roman</option>
+            <option value="georgia" style="font-family: Georgia, serif">Georgia</option>
+            <option value="garamond" style="font-family: Garamond, serif">Garamond</option>
+            <option value="courier" style="font-family: 'Courier New', Courier, monospace">Courier</option>
+            <option value="consolas" style="font-family: Consolas, monospace">Consolas</option>
+            <option value="opendyslexic" style="font-family:'OpenDyslexic', sans-serif; font-size: 0.8em">OpenDyslexic</option>
+          </select>
+        </label>
+
+        <label>Font Size: 
+          <select id="font-size" aria-label="Font Size">
+            <option value="80%">80%</option>
+            <option value="100%" selected>100%</option>
+            <option value="120%">120%</option>
+            <option value="150%">150%</option>
+            <option value="200%">200%</option>
+            <option value="220%">220%</option>
+            <option value="250%">250%</option>
+            <option value="300%">300%</option>
+          </select>
+        </label>
+
+        <label>Font Weight: 
+          <select id="font-weight" aria-label="Font Weight">
+            <option value="default" selected>Book default</option>
+            <option value="bold" style="font-weight: bold;">Bold</option>
+          </select>
+        </label>
+
+        <label>Text Align: 
+          <select id="text-align" aria-label="Text Align">
+            <option value="left" selected>Left</option>
+            <option value="justify">Justify</option>
+          </select>
+        </label>
+      </div>
+
+      <div id="panel-spacing" class="options-panel" role="tabpanel" aria-labelledby="tab-spacing" hidden>
+        
+        <label>Page Width
+          <select id="width-control">
+            <option value="narrow">Narrow</option>
+            <option value="medium">Medium</option>
+            <option value="wide" selected>Wide</option>
+          </select>
+        </label>
+        
+        <label>Line Spacing: 
+          <select id="line-height" aria-label="Line Spacing">
+            <option value="1.2">1.2</option>
+            <option value="1.5" selected>1.5</option>
+            <option value="1.8">1.8</option>
+            <option value="2.0">2.0</option>
+          </select>
+        </label>
+
+        <label>Paragraph Spacing: 
+          <select id="paragraph-spacing" aria-label="Paragraph Spacing">
+            <option value="default" selected>Book default</option>
+            <option value="0">0</option>
+            <option value="0.5em">0.5</option>
+            <option value="1em">1</option>
+            <option value="1.5em">1.5</option>
+            <option value="2em">2</option>
+          </select>
+        </label>
+
+        <label>Paragraph Indent: 
+          <select id="paragraph-indent" aria-label="Paragraph Indent">
+            <option value="default" selected>Book default</option>
+            <option value="0">0</option>
+            <option value="1em">1</option>
+            <option value="2em">2</option>
+            <option value="3em">3</option>
+          </select>
+        </label>
+
+        <label>Letter Spacing: 
+          <select id="letter-spacing" aria-label="Letter Spacing">
+            <option value="default" selected>0</option>
+            <option value="0.05em">5%</option>
+            <option value="0.12em">12%</option>
+            <option value="0.2em">20%</option>
+          </select>
+        </label>
+
+        <label>Word Spacing: 
+          <select id="word-spacing" aria-label="Word Spacing">
+            <option value="default" selected>Book default</option>
+            <option value="0.16em">Wide</option>
+            <option value="0.32em">Wider</option>
+          </select>
+        </label>
+      </div>
+      <button id="options-close" type="button" aria-label="Close options">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 15l7-7 7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <div id="viewer-container">
+    <nav id="toc-drawer" aria-label="Search and Table of Contents" tabindex="-1">
+      <form id="search-form" role="search">
+        <label>Search: <input type="search" id="search-input"></label>
+      </form>
+      <p id="search-status"></p>
+      <button id="search-back" type="button" hidden>Back to original location</button>
+      <ul id="search-results"></ul>
+      <hr>
+      <h3 style="margin-top:0;">Table of Contents</h3>
+      <ul id="toc-list"></ul>
+    </nav>
+    <section id="metadata-drawer" aria-label="Book metadata" tabindex="-1">
+      <h3 style="margin-top:0;">Metadata</h3>
+      <div id="metadata-list">Open a book to see its details.</div>
+    </section>
+    <button id="prev" class="page-arrow" aria-label="Previous section">
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <div id="viewer" tabindex="-1" role="region" aria-label="Book Reader Content"></div>
+    <button id="next" class="page-arrow" aria-label="Next section">
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+  </div>
+
+  <dialog id="note-dialog" aria-labelledby="note-dialog-title" aria-describedby="note-dialog-text">
+    <h2 id="note-dialog-title">Note</h2>
+    <div id="note-dialog-text"></div>
+    <form method="dialog">
+      <button value="close">Close</button>
+    </form>
+  </dialog>
+
+  <dialog id="scripts-dialog" aria-labelledby="scripts-dialog-title" aria-describedby="scripts-dialog-text">
+    <h2 id="scripts-dialog-title">This book contains scripts, allow them?</h2>
+    <p id="scripts-dialog-text">Only allow scripts for interactive publications that you trust. Setting can be changed in options tab.</p>
+    <form method="dialog">
+      <button value="off" autofocus>No</button>
+      <button value="on">Yes</button>
+    </form>
+  </dialog>
+  
+  <!--scripts-->
+  <script src="reader-dependencies/fluoro-riso.js" data-button="false"></script>
+  <script src="reader-dependencies/fonts.js"></script>
+  <script src="reader-dependencies/reader.js"></script>
+</body>
+</html>
