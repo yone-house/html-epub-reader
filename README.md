@@ -19,12 +19,12 @@ Turn pages with the arrow keys, the arrows beside the page, or by swiping on a t
 
 | **Toolbar**     	|                                                                                                                  	|
 |-----------------	|------------------------------------------------------------------------------------------------------------------	|
-| **Open book**   	| opens new book from local files                                                                                  	|
-| **Contents**    	| chapter list, search the whole book, jump back to where you were                                                 	|
-| **Search**      	| searches whole book for terms, allows a return to previous location                                              	|
-| **Read aloud**  	| reads from the top of the screen with the computer's voice, turning pages as it goes                             	|
-| **Full screen** 	| hides the browser's tabs (press Escape or "Exit full screen" to leave)                                           	|
-| **Metadata**    	| the book's details, including any accessibility information                                                      	|
+| **Open book**   	| Opens new book from local files                                                                                  	|
+| **Contents**    	| Chapter list, search the whole book, jump back to where you were                                                 	|
+| **Search**      	| Searches whole book for terms, allows a return to previous location                                              	|
+| **Read aloud**  	| Reads from the top of the screen with the computer's voice, turning pages as it goes. Also reads image alt text.                             	|
+| **Full screen** 	| Hides the browser's tabs (press Escape or "Exit full screen" to leave)                                           	|
+| **Metadata**    	| The book's details, including any accessibility information                                                      	|
 | **Options**     	| **Display:** reading mode, theme (including Risograph & ink color), animations, image descriptions, book scripts 	|
 |                 	| **Text:** font, size, weight, alignment                                                                          	|
 |                 	| **Spacing:** line length, line/paragraph/letter/word spacing, indentation                                        	|
