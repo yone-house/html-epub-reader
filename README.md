@@ -1,6 +1,6 @@
 # HTML EPUB Reader
 
-Read EPUBs in your web browser with reflowable and accessible controls, primarily built on [epub.js](https://github.com/futurepress/epub.js).
+Read EPUBs in your web browser with reflowable and accessible controls, primarily built on [epub.js](https://github.com/futurepress/epub.js). Built specifically with accessible zine & small-press publishing and distribution.
 
 Use it online at [reader.yone.house](https://reader.yone.house), or download the ZIP for offline use and sharing. Both work the same way. Local copies are fully-functional without internet connection.
 
